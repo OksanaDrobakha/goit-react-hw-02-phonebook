@@ -1,52 +1,54 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { object, string, number } from 'yup';
+import { nanoid } from 'nanoid';
 
-class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
+const initialValues = {
+  name: '',
+  number: '',
+  id: nanoid(),
+};
+
+let schema = object({
+  name: string().required(),
+  number: number().required().positive().integer(),
+});
+
+const ContactForm = () => {
+  const handleSubmit = (values, { resetForm }) => {
+    console.log(values);
+    resetForm();
   };
 
-  handleChange = event => {
-    const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.props.onSubmit(this.state);
-  };
-
-  reset = () => {
-    this.setState({ name: '', number: '' });
-  };
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={schema}
+      onSubmit={handleSubmit}
+    >
+      <Form>
         <>
-          <label htmlFor="">
+          <label>
             Name
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
+            <Field type="text" name="name" />
+            <ErrorMessage name="name" component="div" />
           </label>
-          <label htmlFor="">
+          <label>
             Number
-            <input
+            <Field
               type="tel"
               name="number"
-              value={this.state.number}
-              onChange={this.handleChange}
+              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+              required
             />
+            <ErrorMessage name="number" component="div" />
           </label>
           <button type="submit">Add contact</button>
         </>
-      </form>
-    );
-  }
-}
+      </Form>
+    </Formik>
+  );
+};
 
 export default ContactForm;
