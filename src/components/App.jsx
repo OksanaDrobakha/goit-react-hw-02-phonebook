@@ -24,23 +24,18 @@ export class App extends React.Component {
   addContact = ({ name, number }) => {
     if (
       this.state.contacts.some(
-        value => value.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+        value => value.name.toLowerCase() === name.toLowerCase()
       )
     ) {
       alert(`${name} is already in contacts`);
-    } else {
-      this.setState(prevState => {
-        const list = [...prevState.contacts];
-
-        list.push({
-          id: nanoid(),
-          name: name,
-          number: number,
-        });
-
-        return { contacts: list };
-      });
+      return;
     }
+
+    this.setState(prevState => {
+      return {
+        contacts: [{ id: nanoid(), name, number }, ...prevState.contacts],
+      };
+    });
   };
 
   getFilteredContacts = () => {
@@ -59,19 +54,19 @@ export class App extends React.Component {
   };
 
   render() {
+    const FilteredContacts = this.getFilteredContacts();
     return (
       <div className={css.container}>
         <h1>Phonebook</h1>
         <ContactForm addContact={this.addContact} />
         <h2>Contacts</h2>
-        <ContactList
-          onRemove={this.onRemove}
-          contacts={this.getFilteredContacts()}
-        />
         <Filter
           filterValue={this.state.filter}
           onChangeInput={this.onChangeInput}
         />
+        {FilteredContacts.length > 0 && (
+          <ContactList onRemove={this.onRemove} contacts={FilteredContacts} />
+        )}
       </div>
     );
   }
