@@ -11,7 +11,7 @@ const validationSchema = Yup.object({
       'Name may contain only letters, apostrophe, dash, spaces, and Ukrainian characters'
     )
     .required('Name is required'),
-  number: Yup.number()
+  number: Yup.string()
     .matches(/^\+?\d{10,15}$/, 'Phone number is invalid')
     .required('Phone number is required'),
 });
