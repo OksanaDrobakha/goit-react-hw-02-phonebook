@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 
 const validationSchema = object({
   name: string()
-    .required('Name is required')
     .matches(
       /^[a-zA-Zа-яА-ЯІіЇїЄєҐґ' -]+$/,
       'Name may contain only letters, apostrophe, dash, spaces, and Ukrainian characters'
-    ),
+    )
+    .required('Name is required'),
   number: number()
-    .required('Phone number is required')
-    .matches(/^\+?\d{10,15}$/, 'Phone number is invalid'),
+    .matches(/^\+?\d{10,15}$/, 'Phone number is invalid')
+    .required('Phone number is required'),
 });
 
 const initialValues = {
