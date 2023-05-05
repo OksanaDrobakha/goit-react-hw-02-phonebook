@@ -1,17 +1,17 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { object, string, number } from 'yup';
+import * as Yup from 'yup';
 import css from './ContactForm.module.css';
 import PropTypes from 'prop-types';
 
-const validationSchema = object({
-  name: string()
+const validationSchema = Yup.object({
+  name: Yup.string()
     .matches(
       /^[a-zA-Zа-яА-ЯІіЇїЄєҐґ' -]+$/,
       'Name may contain only letters, apostrophe, dash, spaces, and Ukrainian characters'
     )
     .required('Name is required'),
-  number: number()
+  number: Yup.number()
     .matches(/^\+?\d{10,15}$/, 'Phone number is invalid')
     .required('Phone number is required'),
 });
